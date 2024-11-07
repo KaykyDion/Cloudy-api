@@ -14,36 +14,35 @@ datasource db {
 }
 
 model User {
-  id        Int           @id @default(autoincrement())
-  name      String        @db.VarChar(255)
-  email     String        @db.VarChar(255)
-  password  String        @db.VarChar(255)
-  Post      Post[]
-  Comments  PostComment[]
-  PostLikes PostLike[]
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String        @unique @db.VarChar(30)
+  email        String        @unique @db.VarChar(255)
+  bio          String?       @db.VarChar(255)
+  profilePhoto String?
+  password     String        @db.VarChar(255)
+  Posts        Post[]
+  LikedPosts   Post[]        @relation("PostLikes")
+  UserComments PostComment[]
 }
 
 model Post {
-  id        Int        @id @default(autoincrement())
-  content   String     @db.Text
-  createdAt DateTime
-  ownerId   Int
-  owner     User       @relation(fields: [ownerId], references: [id])
-  likes     PostLike[]
+  id        String        @id @default(uuid()) @db.Uuid
+  content   String        @db.Text
+  createdAt DateTime      @default(now())
+  updatedAt DateTime?
+  ownerId   String        @db.Uuid
+  owner     User          @relation(fields: [ownerId], references: [id])
+  comments  PostComment[]
+  likes     User[]        @relation("PostLikes")
 }
 
 model PostComment {
-  id        Int      @id @default(autoincrement())
-  ownerId   Int
-  owner     User     @relation(fields: [ownerId], references: [id])
-  content   String   @db.Text
-  createdAt DateTime
-}
-
-model PostLike {
-  id      Int  @id @default(autoincrement())
-  ownerId Int
-  owner   User @relation(fields: [ownerId], references: [id])
-  postId  Int
-  post    Post @relation(fields: [postId], references: [id])
+  id        Int       @id @default(autoincrement())
+  ownerId   String    @db.Uuid
+  owner     User      @relation(fields: [ownerId], references: [id])
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  postId    String    @db.Uuid
+  Post      Post      @relation(fields: [postId], references: [id])
 }
