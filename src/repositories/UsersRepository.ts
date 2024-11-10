@@ -17,18 +17,18 @@ export interface UpdateUserAttributes {
 }
 
 export interface UserRepository {
-  register(params: CreateUserAttributes): Promise<User>;
+  register(params: CreateUserAttributes): Promise<Partial<User>>;
 
-  searchUsers(params: SearchUsersAttributes): Promise<User[]>;
+  searchUsers(params: SearchUsersAttributes): Promise<Partial<User>[]>;
 
   count(name: string): Promise<number>;
 
-  findUserById(id: string): Promise<User | null>;
+  findUserById(id: string): Promise<Partial<User> | null>;
 
   updateUser(
     id: string,
     attributes: UpdateUserAttributes
-  ): Promise<User | null>;
+  ): Promise<string | null>;
 
-  deleteUser(id: string): Promise<User | null>;
+  deleteUser(id: string): Promise<string | null>;
 }

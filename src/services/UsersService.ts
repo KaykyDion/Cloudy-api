@@ -1,3 +1,4 @@
+import { hashSync } from "bcrypt";
 import { HttpError } from "../errors/HttpError";
 import {
   CreateUserAttributes,
@@ -10,11 +11,16 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async registerUser(attributes: CreateUserAttributes) {
-    if (attributes.password.length < 8)
+    const { name, email, password } = attributes;
+    if (password.length < 8)
       throw new HttpError(500, "Password must be at least 8 characters long!");
-    if (attributes.name.length < 3)
+    if (name.length < 3)
       throw new HttpError(500, "Username must be at least 3 characters long!");
-    return await this.userRepository.register(attributes);
+    return await this.userRepository.register({
+      name,
+      email,
+      password: hashSync(password, 10),
+    });
   }
 
   async searchUsers(params: SearchUsersAttributes) {

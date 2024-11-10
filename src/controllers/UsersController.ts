@@ -47,11 +47,11 @@ export class UsersController {
     try {
       const id = req.params.id;
       const { bio, profilePhoto } = UpdateUserRequestSchema.parse(req.body);
-      const updatedUser = await this.userService.updateUser(id, {
+      const updateUserMessage = await this.userService.updateUser(id, {
         bio,
         profilePhoto,
       });
-      res.json(updatedUser);
+      res.json({ message: updateUserMessage });
     } catch (error) {
       next(error);
     }
@@ -61,7 +61,7 @@ export class UsersController {
     try {
       const id = req.params.id;
       const deletedUser = await this.userService.deleteUser(id);
-      res.json({ deletedUser });
+      res.json({ message: deletedUser });
     } catch (error) {
       next(error);
     }
