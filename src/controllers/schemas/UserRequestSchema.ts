@@ -15,3 +15,8 @@ export const UpdateUserRequestSchema = z.object({
   bio: z.string().optional(),
   profilePhoto: z.string().optional(),
 });
+
+export const LoginUserRequestSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});

@@ -25,6 +25,10 @@ export interface UserRepository {
 
   findUserById(id: string): Promise<Partial<User> | null>;
 
+  findUserByEmail(
+    email: string
+  ): Promise<Pick<User, "id" | "email" | "password"> | null>;
+
   updateUser(
     id: string,
     attributes: UpdateUserAttributes

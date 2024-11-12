@@ -47,6 +47,15 @@ export class PrismaUsersRepository implements UserRepository {
     });
   }
 
+  async findUserByEmail(
+    email: string
+  ): Promise<Pick<User, "id" | "email" | "password"> | null> {
+    return await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, email: true, password: true },
+    });
+  }
+
   async updateUser(
     id: string,
     attributes: UpdateUserAttributes

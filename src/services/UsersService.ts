@@ -1,4 +1,5 @@
-import { hashSync } from "bcrypt";
+import { hashSync, compare } from "bcrypt";
+import * as jwt from "jsonwebtoken";
 import { HttpError } from "../errors/HttpError";
 import {
   CreateUserAttributes,
@@ -21,6 +22,24 @@ export class UserService {
       email,
       password: hashSync(password, 10),
     });
+  }
+
+  async login(email: string, password: string) {
+    const user = await this.userRepository.findUserByEmail(email);
+    if (!user) {
+      throw new HttpError(500, "incorrect email or password!");
+    }
+
+    const isValidPassword = await compare(password, user.password);
+    if (!isValidPassword)
+      throw new HttpError(500, "incorrect email or password!");
+
+    const userToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "1d" }
+    );
+    return userToken;
   }
 
   async searchUsers(params: SearchUsersAttributes) {

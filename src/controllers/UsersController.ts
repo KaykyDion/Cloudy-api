@@ -2,6 +2,7 @@ import { Handler } from "express";
 import { UserService } from "../services/UsersService";
 import {
   CreateUserRequestSchema,
+  LoginUserRequestSchema,
   SearchUserRequestSchema,
   UpdateUserRequestSchema,
 } from "./schemas/UserRequestSchema";
@@ -28,6 +29,16 @@ export class UsersController {
         password,
       });
       res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  login: Handler = async (req, res, next) => {
+    try {
+      const { email, password } = LoginUserRequestSchema.parse(req.body);
+      const token = await this.userService.login(email, password);
+      res.json(token);
     } catch (error) {
       next(error);
     }
