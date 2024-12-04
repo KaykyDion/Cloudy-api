@@ -57,11 +57,13 @@ export class UsersController {
   update: Handler = async (req, res, next) => {
     try {
       const id = req.params.id;
+      const authenticatedUser = req.authenticatedUser;
       const { bio, profilePhoto } = UpdateUserRequestSchema.parse(req.body);
-      const updateUserMessage = await this.userService.updateUser(id, {
-        bio,
-        profilePhoto,
-      });
+      const updateUserMessage = await this.userService.updateUser(
+        id,
+        authenticatedUser,
+        { bio, profilePhoto }
+      );
       res.json({ message: updateUserMessage });
     } catch (error) {
       next(error);
@@ -71,7 +73,11 @@ export class UsersController {
   delete: Handler = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const deletedUser = await this.userService.deleteUser(id);
+      const authenticatedUser = req.authenticatedUser;
+      const deletedUser = await this.userService.deleteUser(
+        id,
+        authenticatedUser
+      );
       res.json({ message: deletedUser });
     } catch (error) {
       next(error);

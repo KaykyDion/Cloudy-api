@@ -7,6 +7,7 @@ import {
   UpdateUserAttributes,
   UserRepository,
 } from "../repositories/UsersRepository";
+import { User } from "@prisma/client";
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -55,15 +56,29 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: string, attributes: UpdateUserAttributes) {
+  async updateUser(
+    id: string,
+    authenticatedUser: Partial<User>,
+    attributes: UpdateUserAttributes
+  ) {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found!");
+    if (user.id !== authenticatedUser.id)
+      throw new HttpError(
+        401,
+        "You do not have permission to perform this action!"
+      );
     return this.userRepository.updateUser(id, attributes);
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string, authenticatedUser: Partial<User>) {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found!");
+    if (user.id !== authenticatedUser.id)
+      throw new HttpError(
+        401,
+        "You do not have permission to perform this action!"
+      );
     return await this.userRepository.deleteUser(id);
   }
 }
