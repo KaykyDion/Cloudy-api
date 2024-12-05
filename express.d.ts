@@ -4,7 +4,7 @@ import { Request } from "express";
 declare global {
   namespace Express {
     interface Request {
-      authenticatedUser: Partial<User>;
+      authenticatedUser: Pick<User, "id" | "email" | "password">;
     }
   }
 }

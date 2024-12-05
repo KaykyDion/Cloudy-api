@@ -65,12 +65,12 @@ export class PrismaUsersRepository implements UserRepository {
       data: attributes,
     });
     if (!updatedUser) return null;
-    return "User succefully updated!";
+    return "User successfully updated!";
   }
 
   async deleteUser(id: string): Promise<string | null> {
     const deletedUser = await prisma.user.delete({ where: { id } });
     if (!deletedUser) return null;
-    return "User succefully deleted!";
+    return "User successfully deleted!";
   }
 }
