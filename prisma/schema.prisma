@@ -39,7 +39,7 @@ model Post {
 }
 
 model PostComment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   ownerId   String   @db.Uuid
   owner     User     @relation(fields: [ownerId], references: [id])
   content   String   @db.Text
