@@ -1,5 +1,6 @@
 import { Handler } from "express";
 import { CommentsService } from "../services/CommentsService";
+import { CreatePostRequestSchema } from "./schemas/PostRequestSchema";
 
 export class CommentsController {
   constructor(private readonly commentsServices: CommentsService) {}
@@ -8,7 +9,7 @@ export class CommentsController {
     try {
       const postId = req.params.postId;
       const ownerId = req.authenticatedUser.id;
-      const { content } = req.body;
+      const { content } = CreatePostRequestSchema.parse(req.body);
       const comment = await this.commentsServices.createComment({
         postId,
         ownerId,
@@ -24,7 +25,7 @@ export class CommentsController {
     try {
       const commentId = req.params.id;
       const userId = req.authenticatedUser.id;
-      const { content } = req.body;
+      const { content } = CreatePostRequestSchema.parse(req.body);
       const updatedComment = await this.commentsServices.updateComment(
         commentId,
         content,

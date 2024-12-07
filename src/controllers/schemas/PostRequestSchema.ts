@@ -6,5 +6,5 @@ export const SearchPostRequestSchema = z.object({
 });
 
 export const CreatePostRequestSchema = z.object({
-  content: z.string(),
+  content: z.string().min(1),
 });
