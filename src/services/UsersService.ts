@@ -71,6 +71,19 @@ export class UserService {
     return this.userRepository.updateUser(id, attributes);
   }
 
+  async followUser(
+    authenticatedUser: Pick<User, "id">,
+    userToFollowId: string
+  ) {
+    const userToFollow = await this.userRepository.findUserById(userToFollowId);
+    if (!userToFollow) throw new HttpError(404, "User not found!");
+    const message = await this.userRepository.followUser(
+      authenticatedUser.id,
+      userToFollowId
+    );
+    return message;
+  }
+
   async deleteUser(id: string, authenticatedUser: Partial<User>) {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found!");

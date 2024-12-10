@@ -70,6 +70,17 @@ export class UsersController {
     }
   };
 
+  follow: Handler = async (req, res, next) => {
+    try {
+      const authenticatedUser = req.authenticatedUser;
+      const id = req.params.id;
+      const message = await this.userService.followUser(authenticatedUser, id);
+      res.json(message);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   delete: Handler = async (req, res, next) => {
     try {
       const id = req.params.id;

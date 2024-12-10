@@ -43,7 +43,12 @@ export class PrismaUsersRepository implements UserRepository {
   async findUserById(id: string): Promise<Partial<User> | null> {
     return await prisma.user.findUnique({
       where: { id },
-      select: { ...selectUserInfos, Posts: true },
+      select: {
+        ...selectUserInfos,
+        Posts: true,
+        followers: { include: { follower: { select: { name: true } } } },
+        following: { include: { following: { select: { name: true } } } },
+      },
     });
   }
 
@@ -66,6 +71,19 @@ export class PrismaUsersRepository implements UserRepository {
     });
     if (!updatedUser) return null;
     return "User successfully updated!";
+  }
+
+  async followUser(
+    followerId: string,
+    userToFollowId: string
+  ): Promise<string> {
+    await prisma.follower.create({
+      data: {
+        followerId,
+        followingId: userToFollowId,
+      },
+    });
+    return "User successfully followed!";
   }
 
   async deleteUser(id: string): Promise<string | null> {

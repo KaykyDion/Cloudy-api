@@ -34,5 +34,7 @@ export interface UserRepository {
     attributes: UpdateUserAttributes
   ): Promise<string | null>;
 
+  followUser(followerId: string, userToFollow: string): Promise<string>;
+
   deleteUser(id: string): Promise<string | null>;
 }
