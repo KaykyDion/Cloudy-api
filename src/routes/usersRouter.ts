@@ -10,4 +10,5 @@ usersRouter.get("/:id", authMiddleware, usersController.show);
 usersRouter.post("/register", usersController.create);
 usersRouter.put("/:id", authMiddleware, usersController.update);
 usersRouter.post("/:id/followers", authMiddleware, usersController.follow);
+usersRouter.delete("/:id/followers", authMiddleware, usersController.unfollow);
 usersRouter.delete("/:id", authMiddleware, usersController.delete);

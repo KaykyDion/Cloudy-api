@@ -84,6 +84,21 @@ export class UserService {
     return message;
   }
 
+  async unfollowUser(
+    authenticatedUser: Pick<User, "id">,
+    userToUnfollowId: string
+  ) {
+    const userToUnfollow = await this.userRepository.findUserById(
+      userToUnfollowId
+    );
+    if (!userToUnfollow) throw new HttpError(404, "User not found!");
+    const message = await this.userRepository.unfollowUser(
+      authenticatedUser.id,
+      userToUnfollowId
+    );
+    return message;
+  }
+
   async deleteUser(id: string, authenticatedUser: Partial<User>) {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found!");
