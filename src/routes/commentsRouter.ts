@@ -14,6 +14,16 @@ commentsRouter.put(
   authMiddleware,
   commentsController.update
 );
+commentsRouter.post(
+  "/:postId/comments/:id/likes",
+  authMiddleware,
+  commentsController.like
+);
+commentsRouter.delete(
+  "/:postId/comments/:id/likes",
+  authMiddleware,
+  commentsController.deleteLike
+);
 commentsRouter.delete(
   "/:postId/comments/:id",
   authMiddleware,

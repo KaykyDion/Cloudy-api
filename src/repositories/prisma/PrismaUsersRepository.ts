@@ -45,7 +45,7 @@ export class PrismaUsersRepository implements UserRepository {
       where: { id },
       select: {
         ...selectUserInfos,
-        Posts: true,
+        posts: true,
         followers: { include: { follower: { select: { name: true } } } },
         following: { include: { following: { select: { name: true } } } },
       },
@@ -54,10 +54,10 @@ export class PrismaUsersRepository implements UserRepository {
 
   async findUserByEmail(
     email: string
-  ): Promise<Pick<User, "id" | "email" | "password"> | null> {
+  ): Promise<Pick<User, "id" | "name" | "email" | "password"> | null> {
     return await prisma.user.findUnique({
       where: { email },
-      select: { id: true, email: true, password: true },
+      select: { id: true, name: true, email: true, password: true },
     });
   }
 

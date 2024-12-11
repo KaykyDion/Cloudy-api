@@ -4,6 +4,7 @@ import {
   CreateCommentInterface,
 } from "../repositories/CommentsRepository";
 import { PostsRepository } from "../repositories/PostsRepository";
+import { AuthenticatedUser } from "./PostsService";
 
 export class CommentsService {
   constructor(
@@ -35,6 +36,25 @@ export class CommentsService {
       newContent
     );
     return updatedComment;
+  }
+
+  async likeComment(commentId: string, authenicatedUser: AuthenticatedUser) {
+    const comment = await this.commentsRepository.findCommentById(commentId);
+    if (!comment) throw new HttpError(404, "Comment not found!");
+    const userId = authenicatedUser.id;
+    await this.commentsRepository.likeComment(userId, commentId);
+    return `Comment successfully liked by ${authenicatedUser.name}`;
+  }
+
+  async removeLikeFromComment(
+    commentId: string,
+    authenicatedUser: AuthenticatedUser
+  ) {
+    const comment = await this.commentsRepository.findCommentById(commentId);
+    if (!comment) throw new HttpError(404, "Comment not found!");
+    const userId = authenicatedUser.id;
+    await this.commentsRepository.removeLikeFromComment(userId, commentId);
+    return `Like successfully removed from comment  by ${authenicatedUser.name}`;
   }
 
   async deleteComment(commentId: string, userId: string) {

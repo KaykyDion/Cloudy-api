@@ -37,6 +37,34 @@ export class CommentsController {
     }
   };
 
+  like: Handler = async (req, res, next) => {
+    try {
+      const commentId = req.params.id;
+      const authenicatedUser = req.authenticatedUser;
+      const message = await this.commentsServices.likeComment(
+        commentId,
+        authenicatedUser
+      );
+      res.json({ message });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  deleteLike: Handler = async (req, res, next) => {
+    try {
+      const commentId = req.params.id;
+      const authenicatedUser = req.authenticatedUser;
+      const message = await this.commentsServices.removeLikeFromComment(
+        commentId,
+        authenicatedUser
+      );
+      res.json({ message });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   delete: Handler = async (req, res, next) => {
     try {
       const commentId = req.params.id;

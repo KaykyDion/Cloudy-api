@@ -27,7 +27,7 @@ export interface UserRepository {
 
   findUserByEmail(
     email: string
-  ): Promise<Pick<User, "id" | "email" | "password"> | null>;
+  ): Promise<Pick<User, "id" | "name" | "email" | "password"> | null>;
 
   updateUser(
     id: string,

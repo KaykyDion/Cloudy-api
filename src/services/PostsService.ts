@@ -1,10 +1,11 @@
 import { PostsRepository } from "../repositories/PostsRepository";
 import { HttpError } from "../errors/HttpError";
 
-interface AuthenticatedUser {
+export interface AuthenticatedUser {
   id: string;
   email: string;
   password: string;
+  name: string;
 }
 
 export class PostsService {

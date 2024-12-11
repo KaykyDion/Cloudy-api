@@ -30,6 +30,23 @@ export class PrismaCommentsRepository implements CommentsRepository {
     });
   }
 
+  async likeComment(userId: string, commentId: string): Promise<undefined> {
+    await prisma.postComment.update({
+      where: { id: commentId },
+      data: { likes: { connect: { id: userId } } },
+    });
+  }
+
+  async removeLikeFromComment(
+    userId: string,
+    commentId: string
+  ): Promise<undefined> {
+    await prisma.postComment.update({
+      where: { id: commentId },
+      data: { likes: { disconnect: { id: userId } } },
+    });
+  }
+
   async deleteComment(commentId: string): Promise<PostComment> {
     return await prisma.postComment.delete({ where: { id: commentId } });
   }

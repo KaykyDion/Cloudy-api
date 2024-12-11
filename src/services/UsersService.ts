@@ -7,7 +7,7 @@ import {
   UpdateUserAttributes,
   UserRepository,
 } from "../repositories/UsersRepository";
-import { User } from "@prisma/client";
+import { AuthenticatedUser } from "./PostsService";
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -58,7 +58,7 @@ export class UserService {
 
   async updateUser(
     id: string,
-    authenticatedUser: Partial<User>,
+    authenticatedUser: AuthenticatedUser,
     attributes: UpdateUserAttributes
   ) {
     const user = await this.userRepository.findUserById(id);
@@ -72,7 +72,7 @@ export class UserService {
   }
 
   async followUser(
-    authenticatedUser: Pick<User, "id">,
+    authenticatedUser: AuthenticatedUser,
     userToFollowId: string
   ) {
     const userToFollow = await this.userRepository.findUserById(userToFollowId);
@@ -85,7 +85,7 @@ export class UserService {
   }
 
   async unfollowUser(
-    authenticatedUser: Pick<User, "id">,
+    authenticatedUser: AuthenticatedUser,
     userToUnfollowId: string
   ) {
     const userToUnfollow = await this.userRepository.findUserById(
@@ -99,7 +99,7 @@ export class UserService {
     return message;
   }
 
-  async deleteUser(id: string, authenticatedUser: Partial<User>) {
+  async deleteUser(id: string, authenticatedUser: AuthenticatedUser) {
     const user = await this.userRepository.findUserById(id);
     if (!user) throw new HttpError(404, "User not found!");
     if (user.id !== authenticatedUser.id)

@@ -36,6 +36,7 @@ export class PrismaPostsRepository implements PostsRepository {
             createdAt: true,
             content: true,
             owner: { select: { name: true, email: true } },
+            _count: { select: { likes: true } },
           },
         },
       },
