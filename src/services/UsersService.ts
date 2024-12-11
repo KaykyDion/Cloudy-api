@@ -68,7 +68,8 @@ export class UserService {
         401,
         "You do not have permission to perform this action!"
       );
-    return this.userRepository.updateUser(id, attributes);
+    await this.userRepository.updateUser(id, attributes);
+    return `User ${authenticatedUser.name} successfully updated!`;
   }
 
   async followUser(
@@ -77,11 +78,8 @@ export class UserService {
   ) {
     const userToFollow = await this.userRepository.findUserById(userToFollowId);
     if (!userToFollow) throw new HttpError(404, "User not found!");
-    const message = await this.userRepository.followUser(
-      authenticatedUser.id,
-      userToFollowId
-    );
-    return message;
+    await this.userRepository.followUser(authenticatedUser.id, userToFollowId);
+    return `User ${userToFollow.name} successfully followed by ${authenticatedUser.name}`;
   }
 
   async unfollowUser(
@@ -92,11 +90,11 @@ export class UserService {
       userToUnfollowId
     );
     if (!userToUnfollow) throw new HttpError(404, "User not found!");
-    const message = await this.userRepository.unfollowUser(
+    await this.userRepository.unfollowUser(
       authenticatedUser.id,
       userToUnfollowId
     );
-    return message;
+    return `${authenticatedUser.name} unfollowed ${userToUnfollow.name}`;
   }
 
   async deleteUser(id: string, authenticatedUser: AuthenticatedUser) {
@@ -107,6 +105,7 @@ export class UserService {
         401,
         "You do not have permission to perform this action!"
       );
-    return await this.userRepository.deleteUser(id);
+    await this.userRepository.deleteUser(id);
+    return `User ${user.name} successfully deleted!`;
   }
 }

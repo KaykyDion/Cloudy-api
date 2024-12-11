@@ -1,7 +1,6 @@
 import { Handler } from "express";
 import * as jwt from "jsonwebtoken";
 import { PrismaUsersRepository } from "../repositories/prisma/PrismaUsersRepository";
-import { User } from "@prisma/client";
 import { HttpError } from "../errors/HttpError";
 
 const secretKey = process.env.SECRET_KEY;

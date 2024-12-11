@@ -9,9 +9,9 @@ export interface PostsRepository {
 
   editPost(postId: string, newContent: string): Promise<Post | null>;
 
-  likePost(userId: string, postId: string): Promise<string>;
+  likePost(userId: string, postId: string): Promise<void>;
 
-  removeLikeFromPost(userId: string, postId: string): Promise<string>;
+  removeLikeFromPost(userId: string, postId: string): Promise<void>;
 
   deletePost(postId: string): Promise<Post | null>;
 }

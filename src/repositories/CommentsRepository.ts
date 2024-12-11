@@ -17,9 +17,9 @@ export interface CommentsRepository {
 
   updateComment(commentId: string, newContent: string): Promise<PostComment>;
 
-  likeComment(userId: string, commentId: string): Promise<undefined>;
+  likeComment(userId: string, commentId: string): Promise<void>;
 
-  removeLikeFromComment(userId: string, commentId: string): Promise<undefined>;
+  removeLikeFromComment(userId: string, commentId: string): Promise<void>;
 
   deleteComment(commentId: string): Promise<PostComment>;
 }

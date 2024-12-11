@@ -29,14 +29,11 @@ export interface UserRepository {
     email: string
   ): Promise<Pick<User, "id" | "name" | "email" | "password"> | null>;
 
-  updateUser(
-    id: string,
-    attributes: UpdateUserAttributes
-  ): Promise<string | null>;
+  updateUser(id: string, attributes: UpdateUserAttributes): Promise<void>;
 
-  followUser(followerId: string, userToFollowId: string): Promise<string>;
+  followUser(followerId: string, userToFollowId: string): Promise<void>;
 
-  unfollowUser(followerId: string, userToUnfollowId: string): Promise<string>;
+  unfollowUser(followerId: string, userToUnfollowId: string): Promise<void>;
 
-  deleteUser(id: string): Promise<string | null>;
+  deleteUser(id: string): Promise<void>;
 }

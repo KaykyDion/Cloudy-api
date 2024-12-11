@@ -64,43 +64,34 @@ export class PrismaUsersRepository implements UserRepository {
   async updateUser(
     id: string,
     attributes: UpdateUserAttributes
-  ): Promise<string | null> {
-    const updatedUser = await prisma.user.update({
+  ): Promise<void> {
+    await prisma.user.update({
       where: { id },
       data: attributes,
     });
-    if (!updatedUser) return null;
-    return "User successfully updated!";
   }
 
-  async followUser(
-    followerId: string,
-    userToFollowId: string
-  ): Promise<string> {
+  async followUser(followerId: string, userToFollowId: string): Promise<void> {
     await prisma.follower.create({
       data: {
         followerId,
         followingId: userToFollowId,
       },
     });
-    return "User successfully followed!";
   }
 
   async unfollowUser(
     followerId: string,
     userToUnfollowId: string
-  ): Promise<string> {
+  ): Promise<void> {
     await prisma.follower.delete({
       where: {
         followerId_followingId: { followerId, followingId: userToUnfollowId },
       },
     });
-    return "User successfully unfollowed!";
   }
 
-  async deleteUser(id: string): Promise<string | null> {
-    const deletedUser = await prisma.user.delete({ where: { id } });
-    if (!deletedUser) return null;
-    return "User successfully deleted!";
+  async deleteUser(id: string): Promise<void> {
+    await prisma.user.delete({ where: { id } });
   }
 }

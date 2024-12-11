@@ -30,7 +30,7 @@ export class PrismaCommentsRepository implements CommentsRepository {
     });
   }
 
-  async likeComment(userId: string, commentId: string): Promise<undefined> {
+  async likeComment(userId: string, commentId: string): Promise<void> {
     await prisma.postComment.update({
       where: { id: commentId },
       data: { likes: { connect: { id: userId } } },
@@ -40,7 +40,7 @@ export class PrismaCommentsRepository implements CommentsRepository {
   async removeLikeFromComment(
     userId: string,
     commentId: string
-  ): Promise<undefined> {
+  ): Promise<void> {
     await prisma.postComment.update({
       where: { id: commentId },
       data: { likes: { disconnect: { id: userId } } },

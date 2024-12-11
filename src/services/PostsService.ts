@@ -50,23 +50,15 @@ export class PostsService {
   async likePost(userId: string, postId: string) {
     const post = await this.postsRepository.getPostById(postId);
     if (!post) throw new HttpError(404, "Post not found!");
-
-    const likedPostMessage = await this.postsRepository.likePost(
-      userId,
-      postId
-    );
-    return likedPostMessage;
+    await this.postsRepository.likePost(userId, postId);
+    return "Post successfully liked!";
   }
 
   async removeLikeFromPost(userId: string, postId: string) {
     const post = await this.postsRepository.getPostById(postId);
     if (!post) throw new HttpError(404, "Post not found!");
-
-    const message = await this.postsRepository.removeLikeFromPost(
-      userId,
-      postId
-    );
-    return message;
+    await this.postsRepository.removeLikeFromPost(userId, postId);
+    return "Like successfully removed from post";
   }
 
   async deletePost(postId: string, authenticatedUser: AuthenticatedUser) {

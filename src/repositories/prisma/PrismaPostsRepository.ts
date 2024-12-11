@@ -52,22 +52,20 @@ export class PrismaPostsRepository implements PostsRepository {
     return updatedPost;
   }
 
-  async likePost(userId: string, postId: string): Promise<string> {
+  async likePost(userId: string, postId: string): Promise<void> {
     await prisma.post.update({
       where: { id: postId },
       data: { likes: { connect: { id: userId } } },
       include: { likes: true },
     });
-    return "Post successfully liked!";
   }
 
-  async removeLikeFromPost(userId: string, postId: string): Promise<string> {
+  async removeLikeFromPost(userId: string, postId: string): Promise<void> {
     await prisma.post.update({
       where: { id: postId },
       data: { likes: { disconnect: { id: userId } } },
       include: { likes: true },
     });
-    return "Like successfully removed!";
   }
 
   async deletePost(postId: string): Promise<Post | null> {
