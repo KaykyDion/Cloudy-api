@@ -14,10 +14,9 @@ export class UserService {
 
   async registerUser(attributes: CreateUserAttributes) {
     const { name, email, password } = attributes;
-    if (password.length < 8)
-      throw new HttpError(500, "Password must be at least 8 characters long!");
-    if (name.length < 3)
-      throw new HttpError(500, "Username must be at least 3 characters long!");
+    const emailAlreadyUsed = await this.userRepository.findUserByEmail(email);
+    if (emailAlreadyUsed)
+      throw new HttpError(500, "this email is already in use!");
     return await this.userRepository.register({
       name,
       email,
