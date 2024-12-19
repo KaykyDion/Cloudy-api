@@ -17,11 +17,17 @@ export class UserService {
     const emailAlreadyUsed = await this.userRepository.findUserByEmail(email);
     if (emailAlreadyUsed)
       throw new HttpError(500, "this email is already in use!");
-    return await this.userRepository.register({
+    const user = await this.userRepository.register({
       name,
       email,
       password: hashSync(password, 10),
     });
+    const userToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "1d" }
+    )
+    return userToken
   }
 
   async login(email: string, password: string) {

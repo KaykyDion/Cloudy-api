@@ -23,12 +23,12 @@ export class UsersController {
   create: Handler = async (req, res, next) => {
     try {
       const { name, email, password } = CreateUserRequestSchema.parse(req.body);
-      const user = await this.userService.registerUser({
+      const token = await this.userService.registerUser({
         name,
         email,
         password,
       });
-      res.status(201).json(user);
+      res.status(201).json(token);
     } catch (error) {
       next(error);
     }
