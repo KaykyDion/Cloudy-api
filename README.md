@@ -43,6 +43,12 @@ PORT=<porta-de-sua-preferencia>
 SECRET_KEY="suaSenhaSecreta"
 ```
 
+#### Aplique as migrations
+
+```bash
+  npx prisma migrate deploy
+```
+
 #### Rode o servidor
 
 ```bash
