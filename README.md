@@ -2,27 +2,28 @@
 
 A Cloudy-api é uma API de rede social com a arquitetura baseada no twitter
 
-
 ## Tecnologias utilizadas 💻
 
-| Tecnologia| Descrição  |
-|--|--|
-| [PrismaORM](https://www.prisma.io/docs)  |  Ferramenta para o gerenciamento de banco de dados   |
-| [Express](https://expressjs.com/pt-br/) | O Express é um framework web minimalista e altamente flexível para o Node.js |
-| [Zod](https://zod.dev/)| O Zod é uma biblioteca para validação de dados |
-| [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) | Biblioteca utilizada para a geração e validação de tokens JWT  |
-| [Bcrypt](https://www.npmjs.com/package/bcrypt)| Aplica algoritmos de criptografia para gerar hashes de senhas. |
-| [Cors](https://www.npmjs.com/package/cors)| Biblioteca que permite o compartilhamento de recursos entre diferentes domínios|
-| [Dotenv](https://www.npmjs.com/package/dotenv)| Biblioteca que permite carregar e gerenciar variáveis de ambiente |
+| Tecnologia                                                 | Descrição                                                                       |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| [PrismaORM](https://www.prisma.io/docs)                    | Ferramenta para o gerenciamento de banco de dados                               |
+| [Express](https://expressjs.com/pt-br/)                    | O Express é um framework web minimalista e altamente flexível para o Node.js    |
+| [Zod](https://zod.dev/)                                    | O Zod é uma biblioteca para validação de dados                                  |
+| [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) | Biblioteca utilizada para a geração e validação de tokens JWT                   |
+| [Bcrypt](https://www.npmjs.com/package/bcrypt)             | Aplica algoritmos de criptografia para gerar hashes de senhas.                  |
+| [Cors](https://www.npmjs.com/package/cors)                 | Biblioteca que permite o compartilhamento de recursos entre diferentes domínios |
+| [Dotenv](https://www.npmjs.com/package/dotenv)             | Biblioteca que permite carregar e gerenciar variáveis de ambiente               |
 
 ## Rodando localmente
 
 #### Clone o projeto
+
 ```bash
   git clone https://github.com/KaykyDion/Cloudy-api.git
 ```
 
 #### Entre no diretório do projeto
+
 ```bash
   cd Cloudy-api
 ```
@@ -54,6 +55,7 @@ SECRET_KEY="suaSenhaSecreta"
 ```bash
   npm run dev
 ```
+
 ## Endpoints
 
 ### Registrar usuário
@@ -63,6 +65,7 @@ SECRET_KEY="suaSenhaSecreta"
 **Descrição**: Insere um usuário no banco de dados e retorna um token JWT.
 
 **Body:**
+
 ```json
 {
   "name": "John Doe",
@@ -73,12 +76,12 @@ SECRET_KEY="suaSenhaSecreta"
 
 ### Login
 
-`GET /users/login/`
+`POST /users/login/`
 
- **Descrição**: Retorna um token JWT contendo alguns dados do usuário.
-
+**Descrição**: Retorna um token JWT contendo alguns dados do usuário.
 
 **Body:**
+
 ```json
 {
   "email": "john.doe@example.com",
@@ -90,24 +93,24 @@ SECRET_KEY="suaSenhaSecreta"
 
 `GET /users/:id`
 
- **Descrição**: Retorna usuário com ID igual ao informado no parâmetro da requisição.
- 
- **Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Retorna usuário com ID igual ao informado no parâmetro da requisição.
 
+**Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "2ae83s62-916e-4c3d-957c-a6dcaea45459",
-	"name": "John Doe",
-	"email": "john.doe@example.com",
-	"bio": "Full-Stack Developer",
-	"profilePhoto": null,
-	"createdAt": "2024-12-19T16:42:57.675Z",
-	"updatedAt": "2024-12-19T16:44:22.246Z",
-	"posts": [],
-	"followers": [],
-	"following": []
+  "id": "2ae83s62-916e-4c3d-957c-a6dcaea45459",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "bio": "Full-Stack Developer",
+  "profilePhoto": null,
+  "createdAt": "2024-12-19T16:42:57.675Z",
+  "updatedAt": "2024-12-19T16:44:22.246Z",
+  "posts": [],
+  "followers": [],
+  "following": []
 }
 ```
 
@@ -115,11 +118,12 @@ SECRET_KEY="suaSenhaSecreta"
 
 `PUT /users/:id`
 
- **Descrição**: Possibilita ao usuário editar sua bio e sua foto de perfil (Ambos campos são opcionais).
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso e apenas o próprio usuário pode realizar esta ação.
+**Descrição**: Possibilita ao usuário editar sua bio e sua foto de perfil (Ambos campos são opcionais).
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso e apenas o próprio usuário pode realizar esta ação.
 
 **Body:**
+
 ```json
 {
   "bio": "Hello, I'm John Doe",
@@ -128,9 +132,10 @@ SECRET_KEY="suaSenhaSecreta"
 ```
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "User John Doe successfully updated!"
+  "message": "User John Doe successfully updated!"
 }
 ```
 
@@ -138,14 +143,15 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /users/:id`
 
- **Descrição**: Possibilita ao usuário excluir seu próprio perfil.
- 
- **Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso e apenas um ADM ou o próprio usuário consegue realizar esta ação.
+**Descrição**: Possibilita ao usuário excluir seu próprio perfil.
+
+**Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso e apenas um ADM ou o próprio usuário consegue realizar esta ação.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "User John Doe successfully deleted!"
+  "message": "User John Doe successfully deleted!"
 }
 ```
 
@@ -153,47 +159,47 @@ SECRET_KEY="suaSenhaSecreta"
 
 `GET /users?page=1&name=`
 
- **Descrição**: Permite pesquisar usuários pela query "name", incluindo paginação (20 usuários por página).
- 
- **Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite pesquisar usuários pela query "name", incluindo paginação (20 usuários por página).
 
+**Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"users": [
-		{
-			"id": "7ae93c62-916e-4c3d-957x-x6dcaea45459",
-			"name": "xxxxx",
-			"email": "xxxx@xxx.xxx",
-			"bio": "XXXXXX",
-			"profilePhoto": null,
-			"createdAt": "2024-12-19T16:42:57.675Z",
-			"updatedAt": "2024-12-19T16:44:22.246Z"
-		},
-		{
-			"id": "jdfeed1c-11de-4dea-8f5b-d913e879b822",
-			"name": "John Doe",
-			"email": "john.doe@example.com",
-			"bio": null,
-			"profilePhoto": null,
-			"createdAt": "2024-12-12T14:36:27.852Z",
-			"updatedAt": "2024-12-12T14:36:27.852Z"
-		},
-		{
-			"id": "qw780990x-2a2c-4872-af98-12a3dbf00736",
-			"name": "KaykyStaff",
-			"email": "staff.kayky@gmail.com",
-			"bio": "Co-founder and back-end developer at Cloudy",
-			"profilePhoto": null,
-			"createdAt": "2024-12-10T17:35:25.946Z",
-			"updatedAt": "2024-12-10T17:36:00.285Z"
-		}
-	],
-	"meta": {
-		"page": 1,
-		"total": 3
-	}
+  "users": [
+    {
+      "id": "7ae93c62-916e-4c3d-957x-x6dcaea45459",
+      "name": "xxxxx",
+      "email": "xxxx@xxx.xxx",
+      "bio": "XXXXXX",
+      "profilePhoto": null,
+      "createdAt": "2024-12-19T16:42:57.675Z",
+      "updatedAt": "2024-12-19T16:44:22.246Z"
+    },
+    {
+      "id": "jdfeed1c-11de-4dea-8f5b-d913e879b822",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "bio": null,
+      "profilePhoto": null,
+      "createdAt": "2024-12-12T14:36:27.852Z",
+      "updatedAt": "2024-12-12T14:36:27.852Z"
+    },
+    {
+      "id": "qw780990x-2a2c-4872-af98-12a3dbf00736",
+      "name": "KaykyStaff",
+      "email": "staff.kayky@gmail.com",
+      "bio": "Co-founder and back-end developer at Cloudy",
+      "profilePhoto": null,
+      "createdAt": "2024-12-10T17:35:25.946Z",
+      "updatedAt": "2024-12-10T17:36:00.285Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "total": 3
+  }
 }
 ```
 
@@ -201,14 +207,15 @@ SECRET_KEY="suaSenhaSecreta"
 
 `POST /users/:id/followers`
 
- **Descrição**: Realiza a ação de seguir o usuário que tem o ID igual ao passado como parâmetro.
- 
- **Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Realiza a ação de seguir o usuário que tem o ID igual ao passado como parâmetro.
+
+**Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "User successfully followed!"
+  "message": "User successfully followed!"
 }
 ```
 
@@ -216,14 +223,15 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /users/:id/followers`
 
- **Descrição**: Realiza a ação de deixar de seguir o usuário que tem o ID igual ao  passado como parâmetro.
- 
- **Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Realiza a ação de deixar de seguir o usuário que tem o ID igual ao passado como parâmetro.
+
+**Aviso:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "User successfully unfollowed!"
+  "message": "User successfully unfollowed!"
 }
 ```
 
@@ -231,25 +239,27 @@ SECRET_KEY="suaSenhaSecreta"
 
 `POST /posts`
 
- **Descrição**: Registra uma nova publicação no banco de dados.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Registra uma nova publicação no banco de dados.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Body:**
+
 ```json
 {
-	"content": "Sejam bem-vindos usuários!"
+  "content": "Sejam bem-vindos usuários!"
 }
 ```
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-	"content": "Sejam bem-vindos usuários!",
-	"createdAt": "2024-12-11T14:05:50.737Z",
-	"updatedAt": "2024-12-11T14:05:50.737Z",
-	"ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736"
+  "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+  "content": "Sejam bem-vindos usuários!",
+  "createdAt": "2024-12-11T14:05:50.737Z",
+  "updatedAt": "2024-12-11T14:05:50.737Z",
+  "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736"
 }
 ```
 
@@ -257,25 +267,27 @@ SECRET_KEY="suaSenhaSecreta"
 
 `PUT /posts/:id`
 
- **Descrição**: Edita uma publicação no banco de dados.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Edita uma publicação no banco de dados.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Body:**
+
 ```json
 {
-	"content": "Hello world!"
+  "content": "Hello world!"
 }
 ```
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-	"content": "Hello world!",
-	"createdAt": "2024-12-11T14:05:50.737Z",
-	"updatedAt": "2024-12-11T14:08:30.737Z",
-	"ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736"
+  "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+  "content": "Hello world!",
+  "createdAt": "2024-12-11T14:05:50.737Z",
+  "updatedAt": "2024-12-11T14:08:30.737Z",
+  "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736"
 }
 ```
 
@@ -283,41 +295,42 @@ SECRET_KEY="suaSenhaSecreta"
 
 `GET /posts/:id`
 
- **Descrição**: Permite buscar uma publicação no banco de dados pelo ID.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite buscar uma publicação no banco de dados pelo ID.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-	"content": "Sejam bem-vindos usuários!",
-	"createdAt": "2024-12-11T14:05:50.737Z",
-	"updatedAt": "2024-12-11T14:05:50.737Z",
-	"ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
-	"owner": {
-		"name": "KaykyStaff"
-	},
-	"likes": [
-        {
-		    "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-			"name": "IgorRian"
-		}
-    ],
-	"comments": [
-		{
-			"id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-			"createdAt": "2024-12-11T14:22:52.580Z",
-			"content": "Eu sou um dos staffs do app!",
-			"owner": {
-				"name": "IgorRian",
-				"email": "igor.example@gmail.com"
-			},
-			"_count": {
-				"likes": 0
-			}
-		}
-	]
+  "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+  "content": "Sejam bem-vindos usuários!",
+  "createdAt": "2024-12-11T14:05:50.737Z",
+  "updatedAt": "2024-12-11T14:05:50.737Z",
+  "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
+  "owner": {
+    "name": "KaykyStaff"
+  },
+  "likes": [
+    {
+      "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+      "name": "IgorRian"
+    }
+  ],
+  "comments": [
+    {
+      "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+      "createdAt": "2024-12-11T14:22:52.580Z",
+      "content": "Eu sou um dos staffs do app!",
+      "owner": {
+        "name": "IgorRian",
+        "email": "igor.example@gmail.com"
+      },
+      "_count": {
+        "likes": 0
+      }
+    }
+  ]
 }
 ```
 
@@ -325,48 +338,49 @@ SECRET_KEY="suaSenhaSecreta"
 
 `GET /posts?text=&page=1`
 
- **Descrição**: Permite buscar publicações pela query "text", cada página pode conter 20 publicações.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite buscar publicações pela query "text", cada página pode conter 20 publicações.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"posts": [
-		{
-			"id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-			"content": "Sejam bem-vindos usuários!",
-			"createdAt": "2024-12-11T14:05:50.737Z",
-			"updatedAt": "2024-12-11T14:05:50.737Z",
-			"ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
-			"owner": {
-				"name": "KaykyStaff",
-				"email": "staff.example@gmail.com"
-			},
-			"_count": {
-				"likes": 1,
-				"comments": 0
-			}
-		},
-		{
-			"id": "73f9d624-094a-4287-8e87-47e375a2b868",
-			"content": "Hello world!",
-			"createdAt": "2024-12-19T19:38:04.678Z",
-			"updatedAt": "2024-12-19T19:38:04.678Z",
-			"ownerId": "7ae93c62-916e-4c3d-957c-a6dcaea45459",
-			"owner": {
-				"name": "kaykyxxL",
-				"email": "example@gmail.com"
-			},
-			"_count": {
-				"likes": 0,
-				"comments": 0
-			}
-		}
-	],
-	"meta": {
-		"page": 1
-	}
+  "posts": [
+    {
+      "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+      "content": "Sejam bem-vindos usuários!",
+      "createdAt": "2024-12-11T14:05:50.737Z",
+      "updatedAt": "2024-12-11T14:05:50.737Z",
+      "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
+      "owner": {
+        "name": "KaykyStaff",
+        "email": "staff.example@gmail.com"
+      },
+      "_count": {
+        "likes": 1,
+        "comments": 0
+      }
+    },
+    {
+      "id": "73f9d624-094a-4287-8e87-47e375a2b868",
+      "content": "Hello world!",
+      "createdAt": "2024-12-19T19:38:04.678Z",
+      "updatedAt": "2024-12-19T19:38:04.678Z",
+      "ownerId": "7ae93c62-916e-4c3d-957c-a6dcaea45459",
+      "owner": {
+        "name": "kaykyxxL",
+        "email": "example@gmail.com"
+      },
+      "_count": {
+        "likes": 0,
+        "comments": 0
+      }
+    }
+  ],
+  "meta": {
+    "page": 1
+  }
 }
 ```
 
@@ -374,20 +388,21 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /posts/:id`
 
- **Descrição**: Exclui uma publicação no banco de dados pelo ID.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Exclui uma publicação no banco de dados pelo ID.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"deletedPost": {
-		"id": "862c7aa3-9b4c-4a39-ae82-41dd91feddc6",
-		"content": "E essa rede aí ein?",
-		"createdAt": "2024-12-05T12:10:24.785Z",
-		"updatedAt": "2024-12-05T12:10:24.785Z",
-		"ownerId": "c3f35498-7414-45a1-a507-70ad9e662e8e"
-	}
+  "deletedPost": {
+    "id": "862c7aa3-9b4c-4a39-ae82-41dd91feddc6",
+    "content": "E essa rede aí ein?",
+    "createdAt": "2024-12-05T12:10:24.785Z",
+    "updatedAt": "2024-12-05T12:10:24.785Z",
+    "ownerId": "c3f35498-7414-45a1-a507-70ad9e662e8e"
+  }
 }
 ```
 
@@ -395,11 +410,12 @@ SECRET_KEY="suaSenhaSecreta"
 
 `GET /posts/:id/likes`
 
- **Descrição**: Permite marcar uma publicação com um "like".
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite marcar uma publicação com um "like".
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 "Post successfully liked!"
 ```
@@ -408,11 +424,12 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /posts/:id/likes`
 
- **Descrição**: Permite remover o like de uma publicação.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite remover o like de uma publicação.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 "Like successfully removed!"
 ```
@@ -421,26 +438,28 @@ SECRET_KEY="suaSenhaSecreta"
 
 `POST /posts/:postId/comments`
 
- **Descrição**: Permite que usuários comentem em uma publicação.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite que usuários comentem em uma publicação.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Body:**
+
 ```json
 {
-	"content": "Ótima publicação!"
+  "content": "Ótima publicação!"
 }
 ```
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-	"ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
-	"content": "Ótima publicação!!",
-	"createdAt": "2024-12-11T14:22:52.580Z",
-	"updatedAt": "2024-12-11T14:22:52.580Z",
-	"postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
+  "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+  "ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
+  "content": "Ótima publicação!!",
+  "createdAt": "2024-12-11T14:22:52.580Z",
+  "updatedAt": "2024-12-11T14:22:52.580Z",
+  "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
 }
 ```
 
@@ -448,26 +467,28 @@ SECRET_KEY="suaSenhaSecreta"
 
 `PUT /posts/:postId/comments/:id`
 
- **Descrição**: Permite que usuários editem um comentário em uma publicação.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite que usuários editem um comentário em uma publicação.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Body:**
+
 ```json
 {
-	"content": "Comentário editado!"
+  "content": "Comentário editado!"
 }
 ```
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-	"ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
-	"content": "Comentário editado!",
-	"createdAt": "2024-12-11T14:22:52.580Z",
-	"updatedAt": "2024-12-11T14:24:22.580Z",
-	"postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
+  "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+  "ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
+  "content": "Comentário editado!",
+  "createdAt": "2024-12-11T14:22:52.580Z",
+  "updatedAt": "2024-12-11T14:24:22.580Z",
+  "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
 }
 ```
 
@@ -475,21 +496,22 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /posts/:postId/comments/:id`
 
- **Descrição**: Permite que usuários removam um comentário em uma publicação.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite que usuários removam um comentário em uma publicação.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-    "deletedComment": {
-        "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-        "ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
-        "content": "Comentário editado!",
-        "createdAt": "2024-12-11T14:22:52.580Z",
-        "updatedAt": "2024-12-11T14:24:22.580Z",
-        "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
-    }
+  "deletedComment": {
+    "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+    "ownerId": "b1cf567a-86fa-4bb2-9560-abc2601ae06f",
+    "content": "Comentário editado!",
+    "createdAt": "2024-12-11T14:22:52.580Z",
+    "updatedAt": "2024-12-11T14:24:22.580Z",
+    "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831"
+  }
 }
 ```
 
@@ -497,14 +519,15 @@ SECRET_KEY="suaSenhaSecreta"
 
 `POST /posts/:postId/comments/:id/likes`
 
- **Descrição**: Permite que um usuário dê like em um comentário.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite que um usuário dê like em um comentário.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "Comment successfully liked by Kayky D."
+  "message": "Comment successfully liked by Kayky D."
 }
 ```
 
@@ -512,13 +535,14 @@ SECRET_KEY="suaSenhaSecreta"
 
 `DELETE /posts/:postId/comments/:id/likes`
 
- **Descrição**: Permite que um usuário remova o like de um comentário.
- 
- **Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+**Descrição**: Permite que um usuário remova o like de um comentário.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
 
 **Exemplo de retorno:**
+
 ```json
 {
-	"message": "Like successfully removed from comment by KaykyStaff"
+  "message": "Like successfully removed from comment by KaykyStaff"
 }
 ```
