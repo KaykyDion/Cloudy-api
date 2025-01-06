@@ -19,7 +19,8 @@ export class PrismaPostsRepository implements PostsRepository {
       skip: (page - 1) * 20,
       include: {
         owner: { select: { name: true, email: true } },
-        _count: { select: { likes: true, comments: true } },
+        likes: { select: { id: true, name: true } },
+        comments: { include: { owner: { select: { name: true, id: true } } } },
       },
     });
   }
