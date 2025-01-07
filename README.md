@@ -109,8 +109,28 @@ SECRET_KEY="suaSenhaSecreta"
   "createdAt": "2024-12-19T16:42:57.675Z",
   "updatedAt": "2024-12-19T16:44:22.246Z",
   "posts": [],
-  "followers": [],
-  "following": []
+  "followers": [
+    {
+      "follower": {
+        "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+        "name": "IgorRian"
+      }
+    },
+    {
+      "follower": {
+        "name": "KaykyDion",
+        "id": "cbfeed1c-11de-4dea-8f5b-d913e879b822"
+      }
+    }
+  ],
+  "following": [
+    {
+      "following": {
+        "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
+        "name": "IgorRian"
+      }
+    }
+  ]
 }
 ```
 
@@ -408,7 +428,7 @@ SECRET_KEY="suaSenhaSecreta"
 
 ### Dar like em publicação
 
-`GET /posts/:id/likes`
+`POST /posts/:id/likes`
 
 **Descrição**: Permite marcar uma publicação com um "like".
 
