@@ -22,6 +22,9 @@ export class PrismaPostsRepository implements PostsRepository {
         likes: { select: { id: true, name: true } },
         comments: { include: { owner: { select: { name: true, id: true } } } },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }
 

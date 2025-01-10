@@ -69,7 +69,7 @@ export class PostsService {
         401,
         "You do not have permission to perform this action!"
       );
-    const deletedPost = await this.postsRepository.deletePost(postId);
-    return deletedPost;
+    await this.postsRepository.deletePost(postId);
+    return "Post successfully deleted!";
   }
 }

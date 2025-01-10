@@ -90,11 +90,11 @@ export class PostsController {
     try {
       const id = req.params.id;
       const authenticatedUser = req.authenticatedUser;
-      const deletedPost = await this.postsService.deletePost(
+      const deletedPostMessage = await this.postsService.deletePost(
         id,
         authenticatedUser
       );
-      res.json({ deletedPost });
+      res.json({ deletedPostMessage });
     } catch (error) {
       next(error);
     }
