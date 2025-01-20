@@ -377,10 +377,36 @@ SECRET_KEY="suaSenhaSecreta"
         "name": "KaykyStaff",
         "email": "staff.example@gmail.com"
       },
-      "_count": {
-        "likes": 1,
-        "comments": 0
-      }
+      "likes": [
+        {
+          "name": "kaykyxxL",
+          "id": "7ae93c62-916e-4c3d-957c-a6dcaea45459"
+        }
+      ],
+      "comments": [
+        {
+          "id": "5b0d4037-cda4-4167-b767-0a9e33452855",
+          "ownerId": "cbfeed1c-11de-4dea-8f5b-d913e879b822",
+          "content": "Eu sou um dos staffs do app!",
+          "createdAt": "2025-01-06T21:05:51.028Z",
+          "updatedAt": "2025-01-06T21:05:51.028Z",
+          "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+          "owner": {
+            "name": "KaykyDion",
+            "id": "cbfeed1c-11de-4dea-8f5b-d913e879b822"
+          },
+          "likes": [
+            {
+              "name": "kaykyxxL",
+              "id": "7ae93c62-916e-4c3d-957c-a6dcaea45459"
+            },
+            {
+              "name": "KaykyDion",
+              "id": "ce35064d-3f1c-4872-af98-12a3dbf00736"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "73f9d624-094a-4287-8e87-47e375a2b868",
@@ -392,10 +418,13 @@ SECRET_KEY="suaSenhaSecreta"
         "name": "kaykyxxL",
         "email": "example@gmail.com"
       },
-      "_count": {
-        "likes": 0,
-        "comments": 0
-      }
+      "likes": [
+        {
+          "name": "KaykyDion",
+          "id": "ce35064d-3f1c-4872-af98-12a3dbf00736"
+        }
+      ],
+      "comments": []
     }
   ],
   "meta": {

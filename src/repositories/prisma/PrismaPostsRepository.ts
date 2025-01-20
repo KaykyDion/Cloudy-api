@@ -20,7 +20,12 @@ export class PrismaPostsRepository implements PostsRepository {
       include: {
         owner: { select: { name: true, email: true } },
         likes: { select: { id: true, name: true } },
-        comments: { include: { owner: { select: { name: true, id: true } } } },
+        comments: {
+          include: {
+            owner: { select: { name: true, id: true } },
+            likes: { select: { id: true, name: true } },
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
