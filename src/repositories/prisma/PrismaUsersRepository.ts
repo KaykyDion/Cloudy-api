@@ -45,7 +45,18 @@ export class PrismaUsersRepository implements UserRepository {
       where: { id },
       select: {
         ...selectUserInfos,
-        posts: true,
+        posts: {
+          include: {
+            owner: { select: { name: true, email: true } },
+            likes: { select: { id: true, name: true } },
+            comments: {
+              include: {
+                owner: { select: { name: true, id: true } },
+                likes: { select: { id: true, name: true } },
+              },
+            },
+          },
+        },
         followers: {
           select: { follower: { select: { name: true, id: true } } },
         },

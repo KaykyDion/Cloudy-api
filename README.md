@@ -108,7 +108,21 @@ SECRET_KEY="suaSenhaSecreta"
   "profilePhoto": null,
   "createdAt": "2024-12-19T16:42:57.675Z",
   "updatedAt": "2024-12-19T16:44:22.246Z",
-  "posts": [],
+  "posts": [
+    {
+      "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
+      "content": "Sejam bem-vindos usuários!",
+      "createdAt": "2024-12-11T14:05:50.737Z",
+      "updatedAt": "2024-12-11T14:05:50.737Z",
+      "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
+      "owner": {
+        "name": "KaykyStaff",
+        "email": "staff.example@gmail.com"
+      },
+      "likes": [],
+      "comments": []
+    }
+  ],
   "followers": [
     {
       "follower": {
