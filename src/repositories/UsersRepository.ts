@@ -14,6 +14,7 @@ export interface SearchUsersAttributes {
 export interface UpdateUserAttributes {
   bio?: string;
   profilePhoto?: string;
+  name?: string
 }
 
 export interface UserRepository {

@@ -26,8 +26,8 @@ export class UserService {
       { id: user.id, email: user.email },
       process.env.SECRET_KEY,
       { expiresIn: "1d" }
-    )
-    return userToken
+    );
+    return userToken;
   }
 
   async login(email: string, password: string) {
@@ -74,7 +74,7 @@ export class UserService {
         "You do not have permission to perform this action!"
       );
     await this.userRepository.updateUser(id, attributes);
-    return `User ${authenticatedUser.name} successfully updated!`;
+    return `User successfully updated!`;
   }
 
   async followUser(

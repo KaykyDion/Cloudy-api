@@ -13,6 +13,7 @@ export const SearchUserRequestSchema = z.object({
 
 export const UpdateUserRequestSchema = z.object({
   bio: z.string().optional(),
+  name: z.string().min(3).max(30).optional(),
   profilePhoto: z.string().optional(),
 });
 

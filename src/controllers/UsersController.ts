@@ -58,11 +58,13 @@ export class UsersController {
     try {
       const id = req.params.id;
       const authenticatedUser = req.authenticatedUser;
-      const { bio, profilePhoto } = UpdateUserRequestSchema.parse(req.body);
+      const { bio, profilePhoto, name } = UpdateUserRequestSchema.parse(
+        req.body
+      );
       const updateUserMessage = await this.userService.updateUser(
         id,
         authenticatedUser,
-        { bio, profilePhoto }
+        { bio, profilePhoto, name }
       );
       res.json({ message: updateUserMessage });
     } catch (error) {
