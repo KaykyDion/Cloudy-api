@@ -2,6 +2,7 @@ import { Handler } from "express";
 import * as jwt from "jsonwebtoken";
 import { PrismaUsersRepository } from "../repositories/prisma/PrismaUsersRepository";
 import { HttpError } from "../errors/HttpError";
+import { env } from "../env";
 
 const UserRepository = new PrismaUsersRepository();
 
@@ -18,10 +19,7 @@ export const authMiddleware: Handler = async (req, res, next) => {
     if (!authorization)
       throw new HttpError(401, "The authorization token is required!");
     const token = authorization.split(" ")[1];
-    const decodedUser = jwt.verify(
-      token,
-      process.env.SECRET_KEY
-    ) as DecodedUser;
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
     const user = await UserRepository.findUserByEmail(decodedUser.email);
     if (!user) throw new HttpError(404, "User not found!");
     req.authenticatedUser = user;
