@@ -10,6 +10,7 @@ import {
 import { AuthenticatedUser } from "./PostsService";
 
 import "dotenv/config";
+import { env } from "../env";
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -26,7 +27,7 @@ export class UserService {
     });
     const userToken = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.SECRET_KEY,
+      env.SECRET_KEY,
       { expiresIn: "1d" }
     );
     return userToken;
@@ -44,7 +45,7 @@ export class UserService {
 
     const userToken = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.SECRET_KEY,
+      env.SECRET_KEY,
       { expiresIn: "1d" }
     );
     return userToken;
