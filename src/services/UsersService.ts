@@ -9,6 +9,8 @@ import {
 } from "../repositories/UsersRepository";
 import { AuthenticatedUser } from "./PostsService";
 
+import "dotenv/config";
+
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
