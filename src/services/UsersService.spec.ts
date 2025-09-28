@@ -1,9 +1,10 @@
-import { describe, expect, it } from "vitest";
-import { UserService } from "./UsersService";
-import { InMemoryUsersRepository } from "../repositories/in-memory/InMemoryUsersRepository";
-import { HttpError } from "../errors/HttpError";
 import * as jwt from "jsonwebtoken";
+import { describe, expect, it } from "vitest";
+
 import { env } from "../env";
+import { UserService } from "./UsersService";
+import { HttpError } from "../errors/HttpError";
+import { InMemoryUsersRepository } from "../repositories/in-memory/InMemoryUsersRepository";
 
 interface DecodedUser {
   id: string;
@@ -47,6 +48,27 @@ describe("Users Service", () => {
         password: "221133",
       });
     }).rejects.toThrow(new HttpError(500, "this email is already in use!"));
+  });
+
+  it("should search users", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    await usersService.registerUser({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    await usersService.registerUser({
+      name: "Jane Doe",
+      email: "janedoe@example.com",
+      password: "123456",
+    });
+
+    const users = await usersService.searchUsers({ name: "John", page: 0 });
+
+    expect(users.meta).toEqual({ page: 0, total: 1 });
   });
 
   it("should login an user and return a jwt token", async () => {
@@ -169,19 +191,123 @@ describe("Users Service", () => {
     }).rejects.toThrow(new HttpError(404, "User not found!"));
   });
 
+  it("should follow an user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const token1 = await usersService.registerUser({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    const token2 = await usersService.registerUser({
+      name: "Jane Doe",
+      email: "janedoe@example.com",
+      password: "123456",
+    });
+
+    const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+    const decodedUser2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
+
+    const user1 = (await usersService.findUserById(
+      decodedUser1.id
+    )) as DecodedUser;
+    const user2 = await usersService.findUserById(decodedUser2.id);
+
+    const message = await usersService.followUser(user1, decodedUser2.id);
+
+    expect(message).toEqual(
+      `User ${user2.name} successfully followed by ${user1.name}`
+    );
+  });
+
+  it("should throw an error when the user to follow is not found", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const token1 = await usersService.registerUser({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+
+    const user1 = (await usersService.findUserById(
+      decodedUser1.id
+    )) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.followUser(user1, "83198321-31231-12313-213");
+    }).rejects.toThrow(new HttpError(404, "User not found!"));
+  });
+
+  it("should unfollow an user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const token1 = await usersService.registerUser({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    const token2 = await usersService.registerUser({
+      name: "Jane Doe",
+      email: "janedoe@example.com",
+      password: "123456",
+    });
+
+    const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+    const decodedUser2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
+
+    const user1 = (await usersService.findUserById(
+      decodedUser1.id
+    )) as DecodedUser;
+    const user2 = await usersService.findUserById(decodedUser2.id);
+
+    await usersService.followUser(user1, decodedUser2.id);
+
+    const message = await usersService.unfollowUser(user1, decodedUser2.id);
+
+    expect(message).toEqual(`${user1.name} unfollowed ${user2.name}`);
+  });
+
+  it("should throw an error when the user to unfollow is not found", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const token1 = await usersService.registerUser({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+
+    const user1 = (await usersService.findUserById(
+      decodedUser1.id
+    )) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.unfollowUser(user1, "83198321-31231-12313-213");
+    }).rejects.toThrow(new HttpError(404, "User not found!"));
+  });
+
   it("should throw an error where an user tries to update another user", async () => {
     const usersRepository = new InMemoryUsersRepository();
     const usersService = new UserService(usersRepository);
 
     const token1 = await usersService.registerUser({
-      name: "John Doe1",
-      email: "johndoe1@example.com",
+      name: "John Doe",
+      email: "johndoe@example.com",
       password: "123456",
     });
 
     const token2 = await usersService.registerUser({
-      name: "John Doe2",
-      email: "johndoe2@example.com",
+      name: "Jane Doe",
+      email: "janedoe@example.com",
       password: "123456",
     });
 
@@ -249,8 +375,8 @@ describe("Users Service", () => {
     };
 
     const userData2 = {
-      name: "John Doe2",
-      email: "johndoe2@example.com",
+      name: "Jane Doe",
+      email: "janedoe@example.com",
       password: "4324242",
     };
 

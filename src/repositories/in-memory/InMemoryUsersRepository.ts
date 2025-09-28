@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Follower, User } from "@prisma/client";
 import {
   CreateUserAttributes,
   SearchUsersAttributes,
@@ -9,6 +9,7 @@ import { randomUUID } from "node:crypto";
 
 export class InMemoryUsersRepository implements UserRepository {
   public users: User[] = [];
+  public usersFollowers: Follower[] = [];
 
   async register(params: CreateUserAttributes): Promise<Partial<User>> {
     const user = {
@@ -27,12 +28,15 @@ export class InMemoryUsersRepository implements UserRepository {
     return user;
   }
 
-  async searchUsers(params: SearchUsersAttributes): Promise<Partial<User>[]> {
+  async searchUsers({
+    name,
+    page,
+  }: SearchUsersAttributes): Promise<Partial<User>[]> {
     const users = this.users.filter((user) => {
-      return user.name.toLowerCase().includes(params.name.toLowerCase());
+      return user.name.toLowerCase().includes(name.toLowerCase());
     });
 
-    return users;
+    return users.slice(page * 20, page * 20 + 20);
   }
 
   async count(name: string): Promise<number> {
@@ -67,22 +71,36 @@ export class InMemoryUsersRepository implements UserRepository {
   ): Promise<void> {
     const userToUpdateIndex = this.users.findIndex((user) => user.id === id);
 
-    if (userToUpdateIndex === -1) {
-      throw new Error("User to update not found!");
+    if (userToUpdateIndex !== -1) {
+      this.users[userToUpdateIndex] = {
+        ...this.users[userToUpdateIndex],
+        ...attributes,
+      };
     }
-
-    this.users[userToUpdateIndex] = {
-      ...this.users[userToUpdateIndex],
-      ...attributes,
-    };
   }
 
-  followUser(followerId: string, userToFollowId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async followUser(followerId: string, userToFollowId: string): Promise<void> {
+    this.usersFollowers.push({
+      followerId,
+      followingId: userToFollowId,
+      createdAt: new Date(),
+    });
+
+    return;
   }
 
-  unfollowUser(followerId: string, userToUnfollowId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async unfollowUser(
+    followerId: string,
+    userToUnfollowId: string
+  ): Promise<void> {
+    const filteredFollowers = this.usersFollowers.filter((follower) => {
+      return (
+        follower.followerId !== followerId &&
+        follower.followingId !== userToUnfollowId
+      );
+    });
+
+    this.usersFollowers = filteredFollowers;
   }
 
   async deleteUser(id: string): Promise<void> {
