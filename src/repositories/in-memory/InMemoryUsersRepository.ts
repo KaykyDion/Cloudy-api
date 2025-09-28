@@ -5,13 +5,14 @@ import {
   UpdateUserAttributes,
   UserRepository,
 } from "../UsersRepository";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryUsersRepository implements UserRepository {
   public users: User[] = [];
 
   async register(params: CreateUserAttributes): Promise<Partial<User>> {
     const user = {
-      id: "user1",
+      id: randomUUID(),
       name: params.name,
       email: params.email,
       password: params.password,
@@ -26,16 +27,30 @@ export class InMemoryUsersRepository implements UserRepository {
     return user;
   }
 
-  searchUsers(params: SearchUsersAttributes): Promise<Partial<User>[]> {
-    throw new Error("Method not implemented.");
+  async searchUsers(params: SearchUsersAttributes): Promise<Partial<User>[]> {
+    const users = this.users.filter((user) => {
+      return user.name.toLowerCase().includes(params.name.toLowerCase());
+    });
+
+    return users;
   }
 
-  count(name: string): Promise<number> {
-    throw new Error("Method not implemented.");
+  async count(name: string): Promise<number> {
+    const usersCount = this.users.filter((user) =>
+      user.name.toLowerCase().includes(name.toLowerCase())
+    ).length;
+
+    return usersCount;
   }
 
-  findUserById(id: string): Promise<Partial<User> | null> {
-    throw new Error("Method not implemented.");
+  async findUserById(id: string): Promise<Partial<User> | null> {
+    const user = this.users.find((user) => user.id === id);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
   }
 
   async findUserByEmail(
@@ -46,8 +61,20 @@ export class InMemoryUsersRepository implements UserRepository {
     return user || null;
   }
 
-  updateUser(id: string, attributes: UpdateUserAttributes): Promise<void> {
-    throw new Error("Method not implemented.");
+  async updateUser(
+    id: string,
+    attributes: UpdateUserAttributes
+  ): Promise<void> {
+    const userToUpdateIndex = this.users.findIndex((user) => user.id === id);
+
+    if (userToUpdateIndex === -1) {
+      throw new Error("User to update not found!");
+    }
+
+    this.users[userToUpdateIndex] = {
+      ...this.users[userToUpdateIndex],
+      ...attributes,
+    };
   }
 
   followUser(followerId: string, userToFollowId: string): Promise<void> {
@@ -58,7 +85,8 @@ export class InMemoryUsersRepository implements UserRepository {
     throw new Error("Method not implemented.");
   }
 
-  deleteUser(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteUser(id: string): Promise<void> {
+    const filteredUsers = this.users.filter((user) => user.id !== id);
+    this.users = filteredUsers;
   }
 }

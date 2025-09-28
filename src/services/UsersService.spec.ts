@@ -3,7 +3,16 @@ import { UserService } from "./UsersService";
 import { InMemoryUsersRepository } from "../repositories/in-memory/InMemoryUsersRepository";
 import { HttpError } from "../errors/HttpError";
 import * as jwt from "jsonwebtoken";
-import "dotenv/config";
+import { env } from "../env";
+
+interface DecodedUser {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  iat: number;
+  exp: number;
+}
 
 describe("Users Service", () => {
   it("should register an user and return a jwt token", async () => {
@@ -31,7 +40,7 @@ describe("Users Service", () => {
       password: "123456",
     });
 
-    expect(async () => {
+    await expect(async () => {
       await usersService.registerUser({
         name: "John Doe 2",
         email: "johndoe@example.com",
@@ -61,7 +70,7 @@ describe("Users Service", () => {
     const usersRepository = new InMemoryUsersRepository();
     const usersService = new UserService(usersRepository);
 
-    expect(async () => {
+    await expect(async () => {
       await usersService.login("johndoe@example.com", "221133");
     }).rejects.toThrow(new HttpError(500, "incorrect email or password!"));
   });
@@ -78,8 +87,183 @@ describe("Users Service", () => {
 
     await usersService.registerUser(user);
 
-    expect(async () => {
+    await expect(async () => {
       await usersService.login("johndoe@example.com", "123131");
     }).rejects.toThrow(new HttpError(500, "incorrect email or password!"));
+  });
+
+  it("should find a user by id", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const token = await usersService.registerUser(userData);
+
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
+
+    const user = await usersService.findUserById(decodedUser.id);
+
+    expect(user.email).toEqual(userData.email);
+  });
+
+  it("should throw an error where not found user by id", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    await expect(async () => {
+      await usersService.findUserById("2132131-12313-23113-21");
+    }).rejects.toThrow(new HttpError(404, "User not found!"));
+  });
+
+  it("should update an user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const token = await usersService.registerUser(userData);
+
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
+
+    await usersService.updateUser(decodedUser.id, decodedUser, {
+      name: "Kenzo Titanium",
+      bio: "Hello World!",
+    });
+
+    const updatedUser = await usersService.findUserById(decodedUser.id);
+
+    expect({ name: updatedUser.name, bio: updatedUser.bio }).toEqual({
+      name: "Kenzo Titanium",
+      bio: "Hello World!",
+    });
+  });
+
+  it("should throw an error where not found an user to update", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const token = await usersService.registerUser(userData);
+
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.updateUser("312313-1331-23131-1323", decodedUser, {
+        name: "Kenzo Titanium",
+        bio: "Hello World!",
+      });
+    }).rejects.toThrow(new HttpError(404, "User not found!"));
+  });
+
+  it("should throw an error where an user tries to update another user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const token1 = await usersService.registerUser({
+      name: "John Doe1",
+      email: "johndoe1@example.com",
+      password: "123456",
+    });
+
+    const token2 = await usersService.registerUser({
+      name: "John Doe2",
+      email: "johndoe2@example.com",
+      password: "123456",
+    });
+
+    const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+    const decodedUser2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.updateUser(decodedUser1.id, decodedUser2, {
+        name: "Kenzo Titanium",
+        bio: "Hello World!",
+      });
+    }).rejects.toThrow(
+      new HttpError(401, "You do not have permission to perform this action!")
+    );
+  });
+
+  it("should delete an user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const token = await usersService.registerUser(userData);
+
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
+
+    await usersService.deleteUser(decodedUser.id, decodedUser);
+
+    await expect(async () => {
+      await usersService.findUserById(decodedUser.id);
+    }).rejects.toThrow("User not found!");
+  });
+
+  it("should throw an error where not found user by id on delete user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const token = await usersService.registerUser(userData);
+
+    const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.deleteUser("2132131-12313-23113-21", decodedUser);
+    }).rejects.toThrow(new HttpError(404, "User not found!"));
+  });
+
+  it("should throw an error when a user tries to delete another user", async () => {
+    const usersRepository = new InMemoryUsersRepository();
+    const usersService = new UserService(usersRepository);
+
+    const userData1 = {
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    };
+
+    const userData2 = {
+      name: "John Doe2",
+      email: "johndoe2@example.com",
+      password: "4324242",
+    };
+
+    const token1 = await usersService.registerUser(userData1);
+    const token2 = await usersService.registerUser(userData2);
+
+    const user1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
+    const user2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
+
+    await expect(async () => {
+      await usersService.deleteUser(user1.id, user2);
+    }).rejects.toThrow(
+      new HttpError(401, "You do not have permission to perform this action!")
+    );
   });
 });
