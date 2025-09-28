@@ -1,17 +1,19 @@
-import { User } from "@prisma/client";
+import { Follower, User } from "@prisma/client";
 import {
   CreateUserAttributes,
   SearchUsersAttributes,
   UpdateUserAttributes,
   UserRepository,
 } from "../UsersRepository";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryUsersRepository implements UserRepository {
   public users: User[] = [];
+  public usersFollowers: Follower[] = [];
 
   async register(params: CreateUserAttributes): Promise<Partial<User>> {
     const user = {
-      id: "user1",
+      id: randomUUID(),
       name: params.name,
       email: params.email,
       password: params.password,
@@ -26,16 +28,33 @@ export class InMemoryUsersRepository implements UserRepository {
     return user;
   }
 
-  searchUsers(params: SearchUsersAttributes): Promise<Partial<User>[]> {
-    throw new Error("Method not implemented.");
+  async searchUsers({
+    name,
+    page,
+  }: SearchUsersAttributes): Promise<Partial<User>[]> {
+    const users = this.users.filter((user) => {
+      return user.name.toLowerCase().includes(name.toLowerCase());
+    });
+
+    return users.slice(page * 20, page * 20 + 20);
   }
 
-  count(name: string): Promise<number> {
-    throw new Error("Method not implemented.");
+  async count(name: string): Promise<number> {
+    const usersCount = this.users.filter((user) =>
+      user.name.toLowerCase().includes(name.toLowerCase())
+    ).length;
+
+    return usersCount;
   }
 
-  findUserById(id: string): Promise<Partial<User> | null> {
-    throw new Error("Method not implemented.");
+  async findUserById(id: string): Promise<Partial<User> | null> {
+    const user = this.users.find((user) => user.id === id);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
   }
 
   async findUserByEmail(
@@ -46,19 +65,46 @@ export class InMemoryUsersRepository implements UserRepository {
     return user || null;
   }
 
-  updateUser(id: string, attributes: UpdateUserAttributes): Promise<void> {
-    throw new Error("Method not implemented.");
+  async updateUser(
+    id: string,
+    attributes: UpdateUserAttributes
+  ): Promise<void> {
+    const userToUpdateIndex = this.users.findIndex((user) => user.id === id);
+
+    if (userToUpdateIndex !== -1) {
+      this.users[userToUpdateIndex] = {
+        ...this.users[userToUpdateIndex],
+        ...attributes,
+      };
+    }
   }
 
-  followUser(followerId: string, userToFollowId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async followUser(followerId: string, userToFollowId: string): Promise<void> {
+    this.usersFollowers.push({
+      followerId,
+      followingId: userToFollowId,
+      createdAt: new Date(),
+    });
+
+    return;
   }
 
-  unfollowUser(followerId: string, userToUnfollowId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async unfollowUser(
+    followerId: string,
+    userToUnfollowId: string
+  ): Promise<void> {
+    const filteredFollowers = this.usersFollowers.filter((follower) => {
+      return (
+        follower.followerId !== followerId &&
+        follower.followingId !== userToUnfollowId
+      );
+    });
+
+    this.usersFollowers = filteredFollowers;
   }
 
-  deleteUser(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteUser(id: string): Promise<void> {
+    const filteredUsers = this.users.filter((user) => user.id !== id);
+    this.users = filteredUsers;
   }
 }
