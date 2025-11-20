@@ -9,6 +9,9 @@ import { PostsController } from "./controllers/PostsController";
 import { PrismaCommentsRepository } from "./repositories/prisma/PrismaCommentsRepository";
 import { CommentsService } from "./services/CommentsService";
 import { CommentsController } from "./controllers/CommentsController";
+import { PrismaReportsRepository } from "./repositories/prisma/PrismaReportsRepository";
+import { ReportsService } from "./services/ReportsService";
+import { ReportsController } from "./controllers/ReportsControllers";
 
 const usersRepository = new PrismaUsersRepository();
 const usersService = new UserService(usersRepository);
@@ -24,3 +27,7 @@ const commentsServices = new CommentsService(
   postsRepository
 );
 export const commentsController = new CommentsController(commentsServices);
+
+const reportsRepository = new PrismaReportsRepository();
+const reportsService = new ReportsService(reportsRepository);
+export const reportsController = new ReportsController(reportsService);
