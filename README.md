@@ -1,61 +1,3 @@
-# Cloudy-api
-
-A Cloudy-api é uma API de rede social com a arquitetura baseada no twitter
-
-## Tecnologias utilizadas 💻
-
-| Tecnologia                                                 | Descrição                                                                       |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [PrismaORM](https://www.prisma.io/docs)                    | Ferramenta para o gerenciamento de banco de dados                               |
-| [Express](https://expressjs.com/pt-br/)                    | O Express é um framework web minimalista e altamente flexível para o Node.js    |
-| [Zod](https://zod.dev/)                                    | O Zod é uma biblioteca para validação de dados                                  |
-| [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) | Biblioteca utilizada para a geração e validação de tokens JWT                   |
-| [Bcrypt](https://www.npmjs.com/package/bcrypt)             | Aplica algoritmos de criptografia para gerar hashes de senhas.                  |
-| [Cors](https://www.npmjs.com/package/cors)                 | Biblioteca que permite o compartilhamento de recursos entre diferentes domínios |
-| [Dotenv](https://www.npmjs.com/package/dotenv)             | Biblioteca que permite carregar e gerenciar variáveis de ambiente               |
-
-## Rodando localmente
-
-#### Clone o projeto
-
-```bash
-  git clone https://github.com/KaykyDion/Cloudy-api.git
-```
-
-#### Entre no diretório do projeto
-
-```bash
-  cd Cloudy-api
-```
-
-#### Instale as dependências
-
-```bash
-  npm install
-```
-
-#### Crie um Banco de dados PostgreSQL.
-
-#### Crie um arquivo `.env` seguindo a estrutura do `.env.example` e insira com a URL do banco de dados criado, a porta que o projeto irá rodar e a chave secreta para os token JWT
-
-```bash
-DATABASE_URL="postgresql://<usuario>:<suasenha>@localhost:5432/<nome-do-bd>?schema=public"
-PORT=<porta-de-sua-preferencia>
-SECRET_KEY="suaSenhaSecreta"
-```
-
-#### Aplique as migrations
-
-```bash
-  npx prisma migrate deploy
-```
-
-#### Rode o servidor
-
-```bash
-  npm run dev
-```
-
 ## Endpoints
 
 ### Registrar usuário
@@ -76,7 +18,7 @@ SECRET_KEY="suaSenhaSecreta"
 
 ### Login
 
-`POST /users/login/`
+`GET /users/login/`
 
 **Descrição**: Retorna um token JWT contendo alguns dados do usuário.
 
@@ -108,43 +50,9 @@ SECRET_KEY="suaSenhaSecreta"
   "profilePhoto": null,
   "createdAt": "2024-12-19T16:42:57.675Z",
   "updatedAt": "2024-12-19T16:44:22.246Z",
-  "posts": [
-    {
-      "id": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-      "content": "Sejam bem-vindos usuários!",
-      "createdAt": "2024-12-11T14:05:50.737Z",
-      "updatedAt": "2024-12-11T14:05:50.737Z",
-      "ownerId": "ce35064d-3f1c-4872-af98-12a3dbf00736",
-      "owner": {
-        "name": "KaykyStaff",
-        "email": "staff.example@gmail.com"
-      },
-      "likes": [],
-      "comments": []
-    }
-  ],
-  "followers": [
-    {
-      "follower": {
-        "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-        "name": "IgorRian"
-      }
-    },
-    {
-      "follower": {
-        "name": "KaykyDion",
-        "id": "cbfeed1c-11de-4dea-8f5b-d913e879b822"
-      }
-    }
-  ],
-  "following": [
-    {
-      "following": {
-        "id": "5841f5f6-abe0-4afb-ac17-6e6043a311f6",
-        "name": "IgorRian"
-      }
-    }
-  ]
+  "posts": [],
+  "followers": [],
+  "following": []
 }
 ```
 
@@ -391,36 +299,10 @@ SECRET_KEY="suaSenhaSecreta"
         "name": "KaykyStaff",
         "email": "staff.example@gmail.com"
       },
-      "likes": [
-        {
-          "name": "kaykyxxL",
-          "id": "7ae93c62-916e-4c3d-957c-a6dcaea45459"
-        }
-      ],
-      "comments": [
-        {
-          "id": "5b0d4037-cda4-4167-b767-0a9e33452855",
-          "ownerId": "cbfeed1c-11de-4dea-8f5b-d913e879b822",
-          "content": "Eu sou um dos staffs do app!",
-          "createdAt": "2025-01-06T21:05:51.028Z",
-          "updatedAt": "2025-01-06T21:05:51.028Z",
-          "postId": "2b1069b6-46d9-4a50-9982-9dc20461b831",
-          "owner": {
-            "name": "KaykyDion",
-            "id": "cbfeed1c-11de-4dea-8f5b-d913e879b822"
-          },
-          "likes": [
-            {
-              "name": "kaykyxxL",
-              "id": "7ae93c62-916e-4c3d-957c-a6dcaea45459"
-            },
-            {
-              "name": "KaykyDion",
-              "id": "ce35064d-3f1c-4872-af98-12a3dbf00736"
-            }
-          ]
-        }
-      ]
+      "_count": {
+        "likes": 1,
+        "comments": 0
+      }
     },
     {
       "id": "73f9d624-094a-4287-8e87-47e375a2b868",
@@ -432,13 +314,10 @@ SECRET_KEY="suaSenhaSecreta"
         "name": "kaykyxxL",
         "email": "example@gmail.com"
       },
-      "likes": [
-        {
-          "name": "KaykyDion",
-          "id": "ce35064d-3f1c-4872-af98-12a3dbf00736"
-        }
-      ],
-      "comments": []
+      "_count": {
+        "likes": 0,
+        "comments": 0
+      }
     }
   ],
   "meta": {
@@ -471,7 +350,7 @@ SECRET_KEY="suaSenhaSecreta"
 
 ### Dar like em publicação
 
-`POST /posts/:id/likes`
+`GET /posts/:id/likes`
 
 **Descrição**: Permite marcar uma publicação com um "like".
 
@@ -607,5 +486,94 @@ SECRET_KEY="suaSenhaSecreta"
 ```json
 {
   "message": "Like successfully removed from comment by KaykyStaff"
+}
+```
+
+### Relatar bug
+
+`POST /reports`
+
+**Descrição**: Permite que um usuário reporte um bug.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+
+**Body:**
+
+```json
+{
+  "text": "Hello world!"
+}
+```
+
+**Exemplo de retorno:**
+
+```json
+{
+  "id": "6eaa156a-a10a-4aca-b892-5c107d28636a",
+  "userId": "cbfeed1c-11de-4dea-8f5b-d913e879b822",
+  "text": "Hello world!",
+  "createdAt": "2025-11-20T17:13:59.764Z"
+}
+```
+
+### Buscar relatórios de bug
+
+`GET /reports?userId=""`
+
+**Descrição**: Busca os relatórios de bug, permitindo buscar por usuário ao passar o id do usuário na query.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+
+**Exemplo de retorno:**
+
+```json
+{
+  "id": "6eaa156a-a10a-4aca-b892-5c107d28636a",
+  "userId": "cbfeed1c-11de-4dea-8f5b-d913e879b822",
+  "text": "Hello world!",
+  "createdAt": "2025-11-20T17:13:59.764Z"
+}
+```
+
+### Editar relatório de bug
+
+`PUT /reports/:id`
+
+**Descrição**: Permite que um usuário edite um relatório de bug.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+
+**Body:**
+
+```json
+{
+  "text": "Hello world UPDATED!"
+}
+```
+
+**Exemplo de retorno:**
+
+```json
+{
+  "id": "6eaa156a-a10a-4aca-b892-5c107d28636a",
+  "userId": "cbfeed1c-11de-4dea-8f5b-d913e879b822",
+  "text": "Hello world UPDATED!",
+  "createdAt": "2025-11-20T17:13:59.764Z"
+}
+```
+
+### Excluir relatório de bug
+
+`DELETE /reports/:id`
+
+**Descrição**: Permite que um usuário exclua um relatório de bug.
+
+**Avisos:** É necessário o token JWT de autorização para realizar essa requisição com sucesso.
+
+**Exemplo de retorno:**
+
+```json
+{
+  "message": "Report successfully deleted!"
 }
 ```
