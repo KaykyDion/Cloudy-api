@@ -34,7 +34,7 @@ export class PostsController {
       const { content } = CreatePostRequestSchema.parse(req.body);
       const post = await this.postsService.createPost(
         authenticatedUser,
-        content
+        content,
       );
       res.status(201).json(post);
     } catch (error) {
@@ -50,7 +50,7 @@ export class PostsController {
       const updatedPost = await this.postsService.editPost(
         id,
         content,
-        authenticatedUser
+        authenticatedUser,
       );
       res.json(updatedPost);
     } catch (error) {
@@ -64,7 +64,7 @@ export class PostsController {
       const authenticatedUser = req.authenticatedUser;
       const message = await this.postsService.likePost(
         authenticatedUser.id,
-        postId
+        postId,
       );
       res.json(message);
     } catch (error) {
@@ -78,7 +78,7 @@ export class PostsController {
       const authenticatedUser = req.authenticatedUser;
       const message = await this.postsService.removeLikeFromPost(
         authenticatedUser.id,
-        postId
+        postId,
       );
       res.json(message);
     } catch (error) {
@@ -92,7 +92,7 @@ export class PostsController {
       const authenticatedUser = req.authenticatedUser;
       const deletedPostMessage = await this.postsService.deletePost(
         id,
-        authenticatedUser
+        authenticatedUser,
       );
       res.json({ deletedPostMessage });
     } catch (error) {

@@ -14,7 +14,7 @@ export class PostsService {
   async createPost(authenticatedUser: AuthenticatedUser, content: string) {
     const post = await this.postsRepository.createPost(
       authenticatedUser.id,
-      content
+      content,
     );
     return post;
   }
@@ -33,17 +33,16 @@ export class PostsService {
   async editPost(
     postId: string,
     content: string,
-    authenticatedUser: AuthenticatedUser
+    authenticatedUser: AuthenticatedUser,
   ) {
     const post = await this.postsRepository.getPostById(postId);
     if (!post) throw new HttpError(404, "Post not found!");
     if (post.ownerId !== authenticatedUser.id)
       throw new HttpError(
         401,
-        "You do not have permission to perform this action!"
+        "You do not have permission to perform this action!",
       );
     const updatedPost = await this.postsRepository.editPost(postId, content);
-    if (!updatedPost) throw new HttpError(404, "Post not found!");
     return updatedPost;
   }
 
@@ -67,7 +66,7 @@ export class PostsService {
     if (post.ownerId !== authenticatedUser.id)
       throw new HttpError(
         401,
-        "You do not have permission to perform this action!"
+        "You do not have permission to perform this action!",
       );
     await this.postsRepository.deletePost(postId);
     return "Post successfully deleted!";
