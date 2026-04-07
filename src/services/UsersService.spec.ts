@@ -183,12 +183,12 @@ describe("Users Service", () => {
 
     const decodedUser = jwt.verify(token, env.SECRET_KEY) as DecodedUser;
 
-    await expect(async () => {
-      await usersService.updateUser("312313-1331-23131-1323", decodedUser, {
+    await expect(
+      usersService.updateUser("312313-1331-23131-1323", decodedUser, {
         name: "Kenzo Titanium",
         bio: "Hello World!",
-      });
-    }).rejects.toThrow(new HttpError(404, "User not found!"));
+      }),
+    ).rejects.toThrow(new HttpError(404, "User not found!"));
   });
 
   it("should follow an user", async () => {
@@ -211,14 +211,14 @@ describe("Users Service", () => {
     const decodedUser2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
 
     const user1 = (await usersService.findUserById(
-      decodedUser1.id
+      decodedUser1.id,
     )) as DecodedUser;
     const user2 = await usersService.findUserById(decodedUser2.id);
 
     const message = await usersService.followUser(user1, decodedUser2.id);
 
     expect(message).toEqual(
-      `User ${user2.name} successfully followed by ${user1.name}`
+      `User ${user2.name} successfully followed by ${user1.name}`,
     );
   });
 
@@ -235,7 +235,7 @@ describe("Users Service", () => {
     const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
 
     const user1 = (await usersService.findUserById(
-      decodedUser1.id
+      decodedUser1.id,
     )) as DecodedUser;
 
     await expect(async () => {
@@ -263,7 +263,7 @@ describe("Users Service", () => {
     const decodedUser2 = jwt.verify(token2, env.SECRET_KEY) as DecodedUser;
 
     const user1 = (await usersService.findUserById(
-      decodedUser1.id
+      decodedUser1.id,
     )) as DecodedUser;
     const user2 = await usersService.findUserById(decodedUser2.id);
 
@@ -287,7 +287,7 @@ describe("Users Service", () => {
     const decodedUser1 = jwt.verify(token1, env.SECRET_KEY) as DecodedUser;
 
     const user1 = (await usersService.findUserById(
-      decodedUser1.id
+      decodedUser1.id,
     )) as DecodedUser;
 
     await expect(async () => {
@@ -320,7 +320,7 @@ describe("Users Service", () => {
         bio: "Hello World!",
       });
     }).rejects.toThrow(
-      new HttpError(401, "You do not have permission to perform this action!")
+      new HttpError(401, "You do not have permission to perform this action!"),
     );
   });
 
@@ -389,7 +389,7 @@ describe("Users Service", () => {
     await expect(async () => {
       await usersService.deleteUser(user1.id, user2);
     }).rejects.toThrow(
-      new HttpError(401, "You do not have permission to perform this action!")
+      new HttpError(401, "You do not have permission to perform this action!"),
     );
   });
 });
